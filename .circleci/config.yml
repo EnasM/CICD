@@ -47,6 +47,7 @@ jobs:
           name: test front-end
           command: |
             cd frontend
+            npm install jest --global
             npm run test
                 
             
