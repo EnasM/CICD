@@ -44,7 +44,9 @@ jobs:
           keys: [frontend-test]
       - run:
           name: test front-end
-          command: npm run test
+          command: |
+            cd frontend
+            npm run test
                 
             
 workflows:
