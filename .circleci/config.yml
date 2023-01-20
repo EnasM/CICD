@@ -13,7 +13,6 @@ jobs:
           command: |
             cd frontend
             npm install --legacy-peer-deps
-            sudo apt install npm
             sudo apt install nodejs
             npm run build
       - save_cache:
@@ -49,7 +48,7 @@ jobs:
           command: |
             cd frontend
             sudo npm install jest --global
-            npm run test
+            sudo npm run test
                 
             
 workflows:
