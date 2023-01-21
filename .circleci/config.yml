@@ -47,8 +47,9 @@ jobs:
           name: test front-end
           command: |
             cd frontend
-            sudo npm install jest --global
-            sudo npm run test
+            npm install
+            #sudo npm install jest --global
+            npm run test
                 
             
 workflows:
