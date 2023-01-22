@@ -150,6 +150,7 @@ jobs:
       steps:
           - checkout
           - run: |
+                npm install
                 npm install tar
                 npm install gzip
           - run:
