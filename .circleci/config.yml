@@ -42,24 +42,9 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
       - slack/notify:
-          event: always
           channel: ${SLACK_DEFAULT_CHANNEL}
+          event: always
           template: basic_fail_1
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "Build result",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
