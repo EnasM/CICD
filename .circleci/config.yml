@@ -48,9 +48,21 @@ jobs:
           command: |
             cd frontend
             npm install
-            #sudo npm install jest --global
             npm run test
                 
+  test-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-test]
+      - run:
+          name: test back-end
+          command: |
+            cd backend
+            npm install
+            npm run test
             
 workflows:
   default:
@@ -59,3 +71,5 @@ workflows:
       - build-backend
       - test-frontend:
           requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
