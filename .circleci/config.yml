@@ -144,9 +144,9 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-frontend:
           context: slack-secrets
-      - build-backend
+      - build-backend:
           context: slack-secrets
       - test-frontend:
           requires: [build-frontend]
@@ -156,5 +156,3 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - notify:
-          context: slack-secrets
