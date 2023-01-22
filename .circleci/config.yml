@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.12.1
-  node: 'circleci/node:13.8.0'
+  # node: circleci/node:13.8.0
 
 jobs:
   build-frontend:
@@ -42,9 +42,24 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
       - slack/notify:
-          channel: ${SLACK_DEFAULT_CHANNEL}
           event: always
+          channel: ${SLACK_DEFAULT_CHANNEL}
           template: basic_fail_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "Build result",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -107,40 +122,40 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
 
-  # notify:
-  #   docker:
-  #     - image: 'cimg/base:stable'
-  #   steps:
-  #     - slack/notify:
-  #         custom: |
-  #           {
-  #             "blocks": [
-  #               {
-  #                 "type": "section",
-  #                 "fields": [
-  #                   {
-  #                     "type": "plain_text",
-  #                     "text": "*This is a text notification*",
-  #                     "emoji": true
-  #                   }
-  #                 ]
-  #               }
-  #             ]
-  #           }
-  #         event: always
-
-  deploy:
-    executor:
-      name: node/default
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
     steps:
-      - checkout
-      - node/install-packages
-      - run:
-          command: npm run deploy
       - slack/notify:
-          channel: ${SLACK_DEFAULT_CHANNEL}
-          event: fail
-          template: basic_fail_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+
+  # deploy:
+  #   executor:
+  #     name: node/default
+  #   steps:
+  #     - checkout
+  #     - node/install-packages
+  #     - run:
+  #         command: npm run deploy
+  #     - slack/notify:
+  #         channel: ${SLACK_DEFAULT_CHANNEL}
+  #         event: fail
+  #         template: basic_fail_1
 workflows:
   default:
     jobs:
