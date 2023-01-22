@@ -3,6 +3,18 @@ orbs:
   slack: circleci/slack@4.12.1
   # node: circleci/node:13.8.0
 
+commands:
+   # Exercise - Rollback
+   destroy_environment:
+     steps:
+       - run:
+            name: Destroy environment
+            command: |
+              aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+
+            when: on_fail
+
 jobs:
   build-frontend:
     docker:
@@ -57,8 +69,7 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm run test
-                
+            npm run test               
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -71,8 +82,7 @@ jobs:
           command: |
             cd backend
             npm install
-            npm run test
-            
+            npm run test           
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -89,7 +99,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -106,7 +115,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-
   notify:
     docker:
       - image: 'cimg/base:stable'
@@ -129,18 +137,42 @@ jobs:
             }
           event: always
 
-  # deploy:
-  #   executor:
-  #     name: node/default
-  #   steps:
-  #     - checkout
-  #     - node/install-packages
-  #     - run:
-  #         command: npm run deploy
-  #     - slack/notify:
-  #         channel: ${SLACK_DEFAULT_CHANNEL}
-  #         event: fail
-  #         template: basic_fail_1
+  deploy-infrastructure:
+      docker:
+        - image: amazon/aws-cli
+        
+    steps:
+      - checkout
+      - run: |
+            npm install tar
+            npm install gzip
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/backend.yml \
+            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+            --tags project=udapeople
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              --tags project=your-tag \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            # Your code here
+            exit 1
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      # Here's where you will add some code to rollback on failure      
+
 workflows:
   default:
     jobs:
@@ -156,3 +188,8 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [test-feature-branch]
