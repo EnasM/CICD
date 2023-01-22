@@ -37,6 +37,7 @@ jobs:
               channel: ${SLACK_DEFAULT_CHANNEL}
               event: always
               template: basic_fail_1
+  
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -57,6 +58,7 @@ jobs:
           channel: ${SLACK_DEFAULT_CHANNEL}
           event: always
           template: basic_fail_1
+  
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -70,6 +72,7 @@ jobs:
             cd frontend
             npm install
             npm run test               
+  
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -83,6 +86,7 @@ jobs:
             cd backend
             npm install
             npm run test           
+  
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -99,6 +103,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+  
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -115,6 +120,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+  
   notify:
     docker:
       - image: 'cimg/base:stable'
@@ -141,37 +147,37 @@ jobs:
       docker:
         - image: amazon/aws-cli
         
-    steps:
-      - checkout
-      - run: |
-            npm install tar
-            npm install gzip
-      - run:
-          name: Ensure back-end infrastructure exists
-          command: |
-            aws cloudformation deploy \
-            --template-file .circleci/files/backend.yml \
-            --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-            --tags project=udapeople
-      - run:
-          name: Ensure front-end infrastructure exist
-          command: |
-            aws cloudformation deploy \
-              --template-file .circleci/files/frontend.yml \
-              --tags project=your-tag \
-              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-      - run:
-          name: Add back-end ip to ansible inventory
-          command: |
-            # Your code here
-            exit 1
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+        steps:
+          - checkout
+          - run: |
+                npm install tar
+                npm install gzip
+          - run:
+              name: Ensure back-end infrastructure exists
+              command: |
+                aws cloudformation deploy \
+                --template-file .circleci/files/backend.yml \
+                --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+                --tags project=udapeople
+          - run:
+              name: Ensure front-end infrastructure exist
+              command: |
+                aws cloudformation deploy \
+                  --template-file .circleci/files/frontend.yml \
+                  --tags project=your-tag \
+                  --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                  --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+          - run:
+              name: Add back-end ip to ansible inventory
+              command: |
+                # Your code here
+                exit 1
+          - persist_to_workspace:
+              root: ~/
+              paths:
+                - project/.circleci/ansible/inventory.txt
+          # Here's where you will add some code to rollback on failure      
 
 workflows:
   default:
@@ -190,6 +196,3 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
