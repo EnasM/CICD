@@ -195,7 +195,7 @@ jobs:
             apt-get autoremove
             apt-get install -f
             apt install yum -y --fix-missing
-            apt-get install ansible
+            apt-get install ansible -y
             #yum install -y tar gzip -y --fix-missing
       - run:
           name: Configure server
