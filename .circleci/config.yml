@@ -202,6 +202,8 @@ jobs:
             apt-get install -f
             apt install yum -y --fix-missing
             apt-get install awscli -y
+            apt install software-properties-common
+            apt-add-repository --yes --update ppa:ansible/ansible
             apt-get install ansible -y
             ansible-playbook --version
             #yum install -y tar gzip -y --fix-missing
