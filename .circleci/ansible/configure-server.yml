@@ -56,7 +56,7 @@
     - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
     # Add more env vars here
 
-  roles:
+  #roles:
     # Your code here
 
 # VS Code Extension Version: 1.5.1
