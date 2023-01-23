@@ -203,6 +203,7 @@ jobs:
             apt install yum -y --fix-missing
             apt-get install awscli -y
             apt-get install ansible -y
+            ansible-playbook --version
             #yum install -y tar gzip -y --fix-missing
       - run:
           name: Configure server
