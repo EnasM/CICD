@@ -27,6 +27,7 @@
       state: present
 
   - name: Update packages
+    become: true
     apt:
       name: "*"
       state: latest
