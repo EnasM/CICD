@@ -185,7 +185,7 @@ jobs:
               command: |
                 cd .circleci/ansible
                 cat inventory.txt
-          no_output_timeout: 30m
+              no_output_timeout: 30m
 
           - persist_to_workspace:
               root: ~/
