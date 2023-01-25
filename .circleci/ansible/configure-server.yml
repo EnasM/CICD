@@ -33,14 +33,17 @@
       state: latest
       update_cache: yes
 
-  - name: "install node dependencies"
+  - name: Install Node.js
     become: true
     apt:
-      name:
-        - ["nodejs", "npm"]
-        #- npm # TODO: additional steps required before installing this
+      name: nodejs
       state: present
-      update_cache: yes
+
+  - name: Install npm
+    become: true
+    apt:
+      name: npm
+      state: present
   
   - name: Install pm2
     become: true
