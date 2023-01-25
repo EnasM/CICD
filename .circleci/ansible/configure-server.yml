@@ -26,28 +26,28 @@
       name: "python3"
       state: present
 
-  - name: "upgrade packages"
-    become: true
-    yum:
-      name: "*"
-      state: latest
+  # - name: "upgrade packages"
+  #   become: true
+  #   yum:
+  #     name: "*"
+  #     state: latest
 
-  - name: "install node dependencies"
-    become: true
-    yum:
-      name:
-        - ["nodejs", "npm"]
-        #- npm # TODO: additional steps required before installing this
-      state: present
-      update_cache: true
+  # - name: "install node dependencies"
+  #   become: true
+  #   yum:
+  #     name:
+  #       - ["nodejs", "npm"]
+  #       #- npm # TODO: additional steps required before installing this
+  #     state: present
+  #     update_cache: true
   
-  - name: "install pm2"
-    become: true
-    npm:
-      name: pm2
-      global: true
-      production: true
-      state: present
+  # - name: "install pm2"
+  #   become: true
+  #   npm:
+  #     name: pm2
+  #     global: true
+  #     production: true
+  #     state: present
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
