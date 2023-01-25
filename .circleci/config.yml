@@ -179,7 +179,8 @@ jobs:
               name: Add back-end ip to ansible inventory
               command: |
                 cd .circleci/ansible
-                aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters 'Name=tag:Project,Values=udapeople' --output text >> inventory --region us-east-1
+                IP_ADDRESS=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+                echo $IP_ADDRESS >> ./.circleci/ansible/inventory.txt
           - persist_to_workspace:
               root: ~/
               paths:
@@ -188,7 +189,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ansible/ansible:default
+      - image: python:3.9-alpine3.16
     steps:
       - checkout
       - add_ssh_keys:
@@ -198,17 +199,20 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get update --fix-missing
-            apt-get clean
-            apt-get autoremove
-            apt-get install -f
-            apt install yum -y --fix-missing
-            apt-get install awscli -y
-            apt install software-properties-common -y
-            apt-add-repository --yes --update ppa:ansible/ansible
-            apt-get install ansible -y
-            ansible-playbook --version
-            #yum install -y tar gzip -y --fix-missing
+            apk add --no-cache tar gzip
+            pip install ansible awscli
+            apk add openssh-client
+              #alpine doesn't have ssh
+            # apt-get update --fix-missing
+            # apt-get clean
+            # apt-get autoremove
+            # apt-get install -f
+            # apt install yum -y --fix-missing
+            # apt-get install awscli -y
+            # apt install software-properties-common -y
+            # apt-add-repository --yes --update ppa:ansible/ansible
+            # apt-get install ansible -y
+            # ansible-playbook --version
       - run:
           name: Configure server
           command: |
