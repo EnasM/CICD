@@ -185,7 +185,7 @@ jobs:
               paths:
                 - project/.circleci/ansible/inventory.txt
           # Here's where you will add some code to rollback on failure      
-
+          - destroy_environment
   configure-infrastructure:
     docker:
       - image: python:3.9-alpine3.16
@@ -219,6 +219,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
           no_output_timeout: 30m
       # Here's where you will add some code to rollback on failure
+      - destroy_environment
 workflows:
   default:
     jobs:
