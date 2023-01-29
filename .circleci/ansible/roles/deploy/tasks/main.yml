@@ -5,8 +5,7 @@
     state: directory
 
 - name: List web directory
-  shell:
-    path: |
+  shell: |
       cd ~/backend-app
       ls ~/backend-app
 
