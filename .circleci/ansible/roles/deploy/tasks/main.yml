@@ -4,6 +4,12 @@
     path: "~/backend-app"
     state: directory
 
+- name: List web directory
+  shell:
+    path: |
+      cd ~/backend-app
+      ls ~/backend-app
+
 - name: Extract zipped artifact
   # shell: tar xvzf:
   become: true
