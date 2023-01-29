@@ -12,10 +12,11 @@
 - name: Extract zipped artifact
   # shell: tar xvzf:
   become: true
-  unarchive:
+  shell: tar xvzf
     remote_src: yes 
     src: artifact.tar.gz
     dest: ~/backend-app
+    creates: ~/backend-app
 
 - name: Install npm dependencies
   shell: |
