@@ -12,7 +12,7 @@
 - name: Extract zipped artifact
   # shell: tar xvzf:
   become: true
-  shell: tar xvzf
+  shell: tar xvzf:
     remote_src: yes 
     src: artifact.tar.gz
     dest: ~/backend-app
