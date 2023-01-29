@@ -5,7 +5,10 @@
     state: directory
 
 - name: Extract zipped artifact
+  # shell: tar xvzf:
+  become: true
   unarchive:
+    remote_src: yes 
     src: artifact.tar.gz
     dest: ~/backend-app
 
@@ -24,3 +27,5 @@
   shell: |
     sudo su -c "env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu"
     pm2 save
+
+# VS Code Extension Version: 1.5.1
