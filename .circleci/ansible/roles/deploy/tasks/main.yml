@@ -9,8 +9,6 @@
 - name: Extract zipped artifact
   # shell: tar xvzf:
   become: true
-  shell: |
-    cd ..
   unarchive:
     remote_src: yes 
     src: .circleci/ansible/roles/deploy/files/artifact.tar.gz
