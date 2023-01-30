@@ -3,6 +3,7 @@
   file:
     path: "~/backend-app"
     state: directory
+    mode: '0755'
 
 
 - name: Extract zipped artifact
@@ -12,7 +13,6 @@
     remote_src: yes 
     src: artifact.tar.gz
     dest: ~/backend-app
-    creates: yes
 
 - name: Install npm dependencies
   shell: |
