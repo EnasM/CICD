@@ -1,7 +1,7 @@
 ---
 - name: Create web directory
   file:
-    path: "~/backend-app"
+    path: "/home/ubuntu/backend-app"
     state: directory
     mode: '0755'
 
@@ -12,16 +12,16 @@
   unarchive:
     remote_src: yes 
     src: artifact.tar.gz
-    dest: ~/backend-app
+    dest: /home/ubuntu/backend-app
 
 - name: Install npm dependencies
   shell: |
-    cd ~/backend-app
+    cd /home/ubuntu/backend-app
     npm i
 
 - name: Start app with pm2
   shell: |
-    cd ~/backend-app/dist
+    cd /home/ubuntu/backend-app/dist
     pm2 stop default
     pm2 start main.js
 
