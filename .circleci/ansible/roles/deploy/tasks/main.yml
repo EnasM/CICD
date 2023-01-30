@@ -9,7 +9,7 @@
 - name: Extract zipped artifact
   # shell: tar xvzf:
   become: true
-  shell:
+  shell: |
     cd ..
   unarchive:
     remote_src: yes 
