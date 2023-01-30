@@ -10,7 +10,7 @@
   # shell: tar xvzf:
   become: true
   unarchive:
-    remote_src: yes 
+    # remote_src: yes 
     src: /.circleci/ansible/roles/deploy/files/artifact.tar.gz
     dest: /home/ubuntu/backend-app
 
