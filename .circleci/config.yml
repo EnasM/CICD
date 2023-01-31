@@ -396,7 +396,7 @@ jobs:
               curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
               sudo apt install -y nodejs
               sudo npm install --global n
-              sudo n 13.8.0
+              sudo n 18.13.0
       
       # - run:
       #     name: Get backend url
@@ -404,7 +404,7 @@ jobs:
       #       export BACKEND_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --query 'Reservations[].Instances[].PublicIpAddress' --output text)
       #       export API_URL="http://${BACKEND_IP}:3030"
       #       echo "${API_URL}"
-      
+
       - run:
           name: Backend smoke test.
           command: |
