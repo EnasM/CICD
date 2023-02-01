@@ -397,7 +397,6 @@ jobs:
               sudo apt install -y nodejs
               sudo npm install --global n
               sudo n 18.13.0
-
       - run:
           name: Backend smoke test.
           command: |
