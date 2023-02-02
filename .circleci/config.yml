@@ -52,7 +52,6 @@ jobs:
               event: always
               template: basic_fail_1
   
-  
   build-backend:
     docker:
       - image: circleci/node:13.8.0
